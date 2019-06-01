@@ -1,0 +1,12 @@
+node_modules
+dist
+.DB_store
+
+.DS_Store
+npm-debug.log.*
+.wepycache
+
+src/config/aliyun-api-gateway.js
+src/config/oss.js
+
+.vscode
