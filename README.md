@@ -6,9 +6,10 @@
 
 ![Image text](https://user-images.githubusercontent.com/8922614/58759341-f0804600-855a-11e9-9f34-1f81267cef06.gif)
 ## 本地开始
+```
 cnpm install
 wepy build --watch
-
+```
 
 最后导出的数据格式:
 ```
