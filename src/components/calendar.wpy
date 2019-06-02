@@ -1,158 +1,4 @@
-<style lang="scss" scoped>
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.clearfix:after {
-  content: '';
-  height: 0;
-  line-height: 0;
-  display: block;
-  visibility: hidden;
-  clear: both;
-}
-.calendar-bg {
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 100;
-  transition: 0.3s;
-}
-.calendar-wrapper {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  box-sizing: border-box;
-  z-index: 101;
-  background-color: white;
-  .confirm {
-    position: absolute;
-    bottom: 30rpx;
-    right: 50rpx;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    align-items: center;
-    font-size: 28rpx;
-    // border-radius: 50%;
-  }
-  // height: ;
-}
-.calendar-header {
-  width: 100%;
-  box-sizing: border-box;
-  height: 130rpx;
-  padding: 30rpx 30rpx;
-  background-color: black;
-  color: white;
-  display: flex;
-  justify-content: flex-start;
-  align-content: center;
-  flex-direction: column;
-  font-size: 24rpx;
-  > view:first-child {
-    color: lightgray;
-  }
-}
-.pick-view {
-  width: 100%;
-  height: 100rpx;
-  position: relative;
-  font-size: 40rpx;
-  font-weight: 600;
-  .pick-img {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    > view {
-      width: 60rpx;
-      height: 100%;
-      position: relative;
-      > image {
-        width: 30rpx;
-        height: 30rpx;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
-  }
-}
-picker {
-  width: 130rpx;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-.calendar-content {
-  width: 100%;
-  // padding: 10rpx 50rpx 30rpx 50rpx;
-  // background-color: lightyellow;
-  background-color: white;
-  box-sizing: border-box;
-  font-size: 24rpx;
-  .week {
-    margin-top: 40rpx;
-    > view {
-      flex: 1;
-      color: gray;
-    }
-  }
-  .day {
-    width: 100%;
-    margin-bottom: 40rpx;
-    font-size: 36rpx;
-    > view {
-      position: relative;
-      float: left;
-      width: calc(100% / 7);
-      height: 60rpx;
-      padding: 20rpx;
-      box-sizing: border-box;
-
-      margin-bottom: 20rpx;
-    }
-    .day-item {
-      z-index: 200;
-    }
-    .day-item-active {
-      color: #FFF;
-    }
-    .not-view-month {
-      color: #FFF;
-    }
-    .view-month-future {
-      color: #efefef;
-    }
-    .round {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: black;
-      width: 72rpx;
-      height: 72rpx;
-      border-radius: 50%;
-      z-index: 102;
-    }
-    .restime {
-      color: white;
-    }
-  }
-}
-</style>
+<style lang="scss" src='./calendar.less' scoped></style>
 
 <template>
 <view class="calendar-bg"  wx:if="{{ visible }}" >
@@ -169,26 +15,15 @@ picker {
       <view wx:for="{{ allDays }}"  wx:for-index="idx" wx:key="{{ indx }}"  wx:for-item="month" id="{{ 'month' + idx }}">
         <!-- 年份和月份 -->
         <view class="pick-view">
-          <!--         
-          <view class="pick-img">
-            <view>
-              <image @tap="toPreMonth" src="{{ appimgs.common.left }}"></image>
-            </view>
-            <view>
-              <image @tap="toNextMonth" src="{{ appimgs.common.right }}"></image>
-            </view>
-          </view> -->
-          <!-- <picker  value="{{ viewTime.year }}-{{ viewTime.month }}" start="2018-01" fields="month" mode="date"> -->
-            <view class="flex-center">
-            {{months[idx].format_date}}
-            </view>
-          <!-- </picker> -->
+          <view class="flex-center">
+          {{months[idx].format_date}}
+          </view>
         </view>
         <!-- 日期循环 -->
         <view class="day clearfix">
           <block wx:for="{{ month }}" wx:key="{{ item.key }}" wx:for-index="d">
             <view data-monthIndex="{{ idx }}" data-dayIndex="{{ d }}" @tap="changeResultTime" data-item="{{ item }}" data-monthview="{{ month[15].month }}" class="flex-center ">
-              <view data-month="{{ item.month }}"  class="day-item {{ item.month !== month[15].month ? 'not-view-month':'' }} {{ item.active && item.month === month[15].month ? 'day-item-active':'' }} {{ item.month == (current.months + 1) && item.year == current.years && item.day > current.date ? 'view-month-future':'' }} {{ item.year > current.years ? 'view-month-future':'' }} {{ item.year == current.years && item.month > (current.months + 1) ? 'view-month-future':'' }}">{{ item.day }}</view>
+              <view data-month="{{ item.month }}"  class="day-item {{ item.month !== month[15].month ? 'not-view-month':'' }} {{ item.active && item.month === month[15].month ? 'day-item-active':'' }} {{ item.month == (current.months + 1) && item.year == current.years && item.day < current.date ? 'view-month-future':'' }} {{ item.year < current.years ? 'view-month-future':'' }} {{ item.year == current.years && item.month < (current.months + 1) ? 'view-month-future':'' }}">{{ item.day }}</view>
               <view style="background-color: {{ color }}" wx-if="{{ item.active && item.month === month[15].month }}" class="round"> </view>
             </view>
           </block>
@@ -197,8 +32,7 @@ picker {
       </scroll-view>
     </view>
     <view class="confirm">
-        <!-- <view style="margin-right:60rpx; color: {{color}}" @tap="cancel">取消</view> -->
-        <view style="color: {{ selectArr.length? color : '#efefef' }}" @tap="confirm" >确定</view>
+        <view  @tap="confirm" class="confirm_btn {{ selectArr.length? 'confirm_btn_active' : '' }}">确定</view>
       </view>
   </view>
 </view>
@@ -221,6 +55,7 @@ export default class Calendar extends wepy.component {
   }
 
   data = {
+    month_length: 5, // 展示多少个月份的数据，5表示从当前月开始，往后五个月
     weeksCh: ['一', '二', '三', '四', '五', '六', '日'],
     months: [], // 所有要显示的月份
     scroll_view: 'month4',
@@ -262,24 +97,24 @@ export default class Calendar extends wepy.component {
     // 点击某个日期
     changeResultTime (e) {
       const {item, dayindex, monthindex, monthview} = e.currentTarget.dataset
-      if (moment(item.formatDay).isAfter() || item.month !== monthview) {
-        // wepy.showToast({ title: '不能选择未来的时间，请重新选择', icon: 'none' })
-      } else {
+      // 点击了同一天
+      if (moment().isSame(item.formatDay, 'day')) {
         this._setTime(moment(item.formatDay), monthindex, dayindex)
+      } else {
+        if (moment(item.formatDay).isBefore() || item.month !== monthview) {
+          // do something,
+          // 点击了当前日期之前的日期
+        } else {
+          this._setTime(moment(item.formatDay), monthindex, dayindex)
+        }
       }
     },
-    // 用户点击取消
-    cancel () {
-      this.visible = false
-      this._init(this.value)
-    },
+
     // 用户点击确定
     confirm () {
-      // this.$emit('hanleConfirm', this.current)
       if (!this.selectArr.length) {
         return false
       }
-      this.visible = false
       this.selectArr.sort(function(a, b) {
         if (a.year < b.year) {
           return -1
@@ -299,16 +134,10 @@ export default class Calendar extends wepy.component {
           return 1
         }
       })
-      this.$root.doCalendarReply(this.selectArr)      
-      this.selectArr = []
-      this._init(this.value)
+      console.log(this.selectArr)
     }
   }
-  // watch = {
-  //   value (newValue, oldValue) {
-  //     this._init(newValue)
-  //   }
-  // }
+
   /**
    * _getData
    * 返回当前视图日期数组
@@ -437,15 +266,17 @@ export default class Calendar extends wepy.component {
     this.months = []
     this.allDays = []
     this.current = moment().toObject()
+    // 初始化日历开始的年月日
     let current_month = moment().format('YYYY-MM')
     let format_date = current_month.split('-')[0] + '年' + parseInt(current_month.split('-')[1]) + '月'
     this.months = [{
       date: current_month,
       format_date: format_date
     }]
-    for (var i = 1; i <= 4; i++) {
-      let date = moment().subtract(i, 'months').format('YYYY-MM')
-      this.months.unshift({
+    // 
+    for (var i = 1; i <= this.month_length; i++) {
+      let date = moment().add(i, 'months').format('YYYY-MM')
+      this.months.push({
         date: date,
         format_date: parseInt(date.split('-')[1]) + '月'
       })
